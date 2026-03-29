@@ -40,7 +40,9 @@ fn parse_method(method: &str) -> Result<Method, String> {
     match method {
         "GET" => Ok(Method::GET),
         "POST" => Ok(Method::POST),
-        _ => Err("Only GET and POST are supported.".into()),
+        "PUT" => Ok(Method::PUT),
+        "DELETE" => Ok(Method::DELETE),
+        _ => Err("Only GET, POST, PUT, and DELETE are supported.".into()),
     }
 }
 
@@ -124,7 +126,7 @@ async fn send_request(request: SendRequestPayload) -> Result<SendResponsePayload
     let started_at = Instant::now();
     let mut builder = client.request(method.clone(), url).headers(headers);
 
-    if method == Method::POST {
+    if method != Method::GET {
         builder = builder.body(request.body.unwrap_or_default());
     }
 
@@ -136,20 +138,27 @@ async fn send_request(request: SendRequestPayload) -> Result<SendResponsePayload
         .await
         .map_err(|error| format!("Failed to read response body: {error}"))?;
 
+    let mut response_headers_map = HashMap::new();
+
+    for (name, value) in &response_headers {
+        let value = value
+            .to_str()
+            .map(str::to_owned)
+            .unwrap_or_else(|_| format!("<{} bytes>", value.as_bytes().len()));
+
+        response_headers_map
+            .entry(name.to_string())
+            .and_modify(|current: &mut String| {
+                current.push('\n');
+                current.push_str(&value);
+            })
+            .or_insert(value);
+    }
+
     Ok(SendResponsePayload {
         status: status.as_u16(),
         status_text: status.canonical_reason().unwrap_or("").to_string(),
-        headers: response_headers
-            .iter()
-            .map(|(name, value)| {
-                let value = value
-                    .to_str()
-                    .map(str::to_owned)
-                    .unwrap_or_else(|_| format!("<{} bytes>", value.as_bytes().len()));
-
-                (name.to_string(), value)
-            })
-            .collect(),
+        headers: response_headers_map,
         body,
         duration_ms: started_at.elapsed().as_millis(),
     })

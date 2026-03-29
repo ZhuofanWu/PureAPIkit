@@ -19,6 +19,7 @@
 - 构建生产版本: `pnpm tauri build`
 - 添加 Shadcn 组件: `pnpm dlx shadcn-ui@latest add <component-name>`
 - 检查代码规范: `pnpm lint`
+- 每次完成需求后，进行构建：`corepack pnpm tauri build`。
 
 ## 🛡️ 核心安全与架构规范 (CRITICAL)
 

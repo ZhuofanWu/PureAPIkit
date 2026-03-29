@@ -2,10 +2,7 @@
 
 :root {
   color: #0f172a;
-  background:
-    radial-gradient(circle at top left, rgba(14, 165, 233, 0.14), transparent 24%),
-    radial-gradient(circle at top right, rgba(15, 118, 110, 0.1), transparent 22%),
-    linear-gradient(180deg, #f8fbff 0%, #eef4f9 100%);
+  background: #ffffff;
   font-family:
     "Segoe UI Variable Text", "PingFang SC", "Microsoft YaHei UI", sans-serif;
   font-synthesis: none;
@@ -21,6 +18,7 @@ body {
 
 body {
   margin: 0;
+  background: #ffffff;
 }
 
 #root {
@@ -40,4 +38,22 @@ textarea {
 
 ::selection {
   background: rgba(14, 165, 233, 0.18);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }

@@ -1,4 +1,20 @@
-export type HttpMethod = 'GET' | 'POST'
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
+
+export type RequestPanel = 'params' | 'headers' | 'body' | 'auth'
+
+export type ResponsePanel = 'body' | 'headers' | 'cookies'
+
+export type BodyMode = 'none' | 'raw'
+
+export type BodyFormat = 'JSON' | 'Text' | 'XML'
+
+export interface KeyValueRow {
+  id: string
+  enabled: boolean
+  key: string
+  value: string
+  description: string
+}
 
 export interface RequestPayload {
   method: HttpMethod
